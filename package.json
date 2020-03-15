@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "test": "cargo test --manifest-path crate/Cargo.toml",
     "start": "parcel index.html",
     "build": "parcel build index.html",
     "clean": "rm -rf dist/*",
