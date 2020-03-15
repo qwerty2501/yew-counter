@@ -5,7 +5,7 @@
   "scripts": {
     "test": "cargo test --manifest-path crate/Cargo.toml",
     "start": "parcel index.html",
-    "build": "parcel build index.html",
+    "build": "parcel build --public-url ./ index.html",
     "clean": "rm -rf dist/*",
     "bundle": "run-s clean build"
   },
