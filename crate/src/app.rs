@@ -33,7 +33,7 @@ impl Component for App {
 
     fn view(&self) -> Html {
         html! {
-            <div>
+            <div class="container">
                 <button onclick=self.link.callback(|_|Msg::Increment)>{"+"}</button>
                 <p>{self.count}</p>
                 <button onclick=self.link.callback(|_|Msg::Decrement)>{"-"}</button>
@@ -53,19 +53,24 @@ mod tests {
         assert_eq!(0, app.count);
     }
 
-    #[test_case(Msg::Increment, -4, -3)]
-    #[test_case(Msg::Increment, -1, 0)]
-    #[test_case(Msg::Increment, 0, 1)]
-    #[test_case(Msg::Increment, 3, 4)]
-    #[test_case(Msg::Decrement, 1, 0)]
-    #[test_case(Msg::Decrement, 0, -1)]
-    #[test_case(Msg::Decrement, -2, -3)]
-    #[test_case(Msg::Decrement, 3, 2)]
-    fn update_works(msg: Msg, before: isize, expected: isize) {
+    #[test_case(Msg::Increment, -4, -3,true)]
+    #[test_case(Msg::Increment, -1, 0,true)]
+    #[test_case(Msg::Increment, 0, 1, true)]
+    #[test_case(Msg::Increment, 3, 4, true)]
+    #[test_case(Msg::Decrement, 1, 0, true)]
+    #[test_case(Msg::Decrement, 0, -1,true)]
+    #[test_case(Msg::Decrement, -2, -3,true)]
+    #[test_case(Msg::Decrement, 3, 2, true)]
+    fn update_works(
+        msg: Msg,
+        before_count: isize,
+        expected_count: isize,
+        expected_should_render: bool,
+    ) {
         let mut app = App::create((), ComponentLink::<App>::new());
-        app.count = before;
-        app.update(msg);
-        assert_eq!(expected, app.count);
+        app.count = before_count;
+        assert_eq!(expected_should_render, app.update(msg));
+        assert_eq!(expected_count, app.count);
     }
 
     #[test_case(4)]
@@ -77,7 +82,7 @@ mod tests {
         let mut app = App::create((), ComponentLink::<App>::new());
         app.count = count;
         let expected = html! {
-            <div>
+            <div class="container">
                 <button onclick=app.link.callback(|_|Msg::Increment)>{"+"}</button>
                 <p>{count}</p>
                 <button onclick=app.link.callback(|_|Msg::Decrement)>{"-"}</button>
