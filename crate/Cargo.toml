@@ -21,3 +21,7 @@ target="wasm32-unknown-unknown"
 
 [features]
 default = ["console_error_panic_hook","wee_alloc"]
+
+[profile.release]
+opt-level = "z"
+lto = true
