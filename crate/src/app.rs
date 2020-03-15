@@ -1,24 +1,90 @@
 use yew::prelude::*;
 
-pub struct App {}
+pub struct App {
+    count: isize,
+    link: ComponentLink<Self>,
+}
 
-pub enum Msg {}
+pub enum Msg {
+    Increment,
+    Decrement,
+}
 
 impl Component for App {
     type Message = Msg;
     type Properties = ();
 
-    fn create(_: Self::Properties, _: ComponentLink<Self>) -> Self {
-        App {}
+    fn create(_: Self::Properties, link: ComponentLink<Self>) -> Self {
+        App { count: 0, link }
     }
 
-    fn update(&mut self, _msg: Self::Message) -> ShouldRender {
-        true
+    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+        match msg {
+            Msg::Increment => {
+                self.count += 1;
+                true
+            }
+            Msg::Decrement => {
+                self.count -= 1;
+                true
+            }
+        }
     }
 
     fn view(&self) -> Html {
         html! {
-            <p>{ "Hello world!" }</p>
+            <div>
+                <button onclick=self.link.callback(|_|Msg::Increment)>{"+"}</button>
+                <p>{self.count}</p>
+                <button onclick=self.link.callback(|_|Msg::Decrement)>{"-"}</button>
+            </div>
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use test_case::test_case;
+
+    #[test]
+    fn create_works() {
+        let app = App::create((), ComponentLink::<App>::new());
+        assert_eq!(0, app.count);
+    }
+
+    #[test_case(Msg::Increment, -4, -3)]
+    #[test_case(Msg::Increment, -1, 0)]
+    #[test_case(Msg::Increment, 0, 1)]
+    #[test_case(Msg::Increment, 3, 4)]
+    #[test_case(Msg::Decrement, 1, 0)]
+    #[test_case(Msg::Decrement, 0, -1)]
+    #[test_case(Msg::Decrement, -2, -3)]
+    #[test_case(Msg::Decrement, 3, 2)]
+    fn update_works(msg: Msg, before: isize, expected: isize) {
+        let mut app = App::create((), ComponentLink::<App>::new());
+        app.count = before;
+        app.update(msg);
+        assert_eq!(expected, app.count);
+    }
+
+    #[test_case(4)]
+    #[test_case(3)]
+    #[test_case(0)]
+    #[test_case(-1)]
+    #[test_case(-2)]
+    fn view_works(count: isize) {
+        let mut app = App::create((), ComponentLink::<App>::new());
+        app.count = count;
+        let expected = html! {
+            <div>
+                <button onclick=app.link.callback(|_|Msg::Increment)>{"+"}</button>
+                <p>{count}</p>
+                <button onclick=app.link.callback(|_|Msg::Decrement)>{"-"}</button>
+            </div>
+        };
+
+        let actual = app.view();
+        assert_eq!(expected, actual);
     }
 }

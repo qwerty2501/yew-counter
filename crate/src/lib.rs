@@ -2,6 +2,9 @@ mod app;
 #[macro_use]
 extern crate cfg_if;
 
+#[cfg(test)]
+extern crate test_case;
+
 use wasm_bindgen::prelude::*;
 
 cfg_if! {
@@ -23,7 +26,9 @@ cfg_if! {
 }
 #[wasm_bindgen]
 pub fn run() -> Result<(), JsValue> {
+    set_panic_hook();
     yew::start_app::<app::App>();
 
     Ok(())
 }
+
