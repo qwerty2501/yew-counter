@@ -25,4 +25,4 @@ var n,e=arguments[3],t="/home/qwerty2501/projects/rust/yew-counter/node_modules/
 },{"util":"wqTM","fs":"sC8V"}],0:[function(require,module,exports) {
 var b=require("z1Am");b.register("wasm",require("ocK6"));b.load([["yew_counter_crate_bg.ecb38274.wasm","ZMel"]]).then(function(){require("Ws3s");});
 },{}]},{},[0], null)
-//# sourceMappingURL=/app.007c776c.js.map
+//# sourceMappingURL=app.007c776c.js.map
